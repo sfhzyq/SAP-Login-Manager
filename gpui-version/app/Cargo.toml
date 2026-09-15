@@ -1,0 +1,36 @@
+[package]
+name = "sap-login-manager-gpui"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+description = "SAP Login Manager - GPUI 版"
+
+[[bin]]
+name = "sap-login-manager-gpui"
+path = "src/main.rs"
+
+[dependencies]
+sap-backend = { workspace = true }
+gpui-kit = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = "0.4"
+log = "0.4"
+arboard = "3"
+# 锁定/销毁时把运行时主密码内存清零，防止明文残留在已释放的堆内存
+zeroize = "1"
+# 运行时主密码类型化封装：Drop 自动清零 + Debug 输出打码
+secrecy = "0.10"
+# 原生文件对话框（导出另存 / 备份导入选文件）
+rfd = "0.15"
+
+[target.'cfg(windows)'.dependencies]
+winreg = "0.55"
+# 系统托盘（Tauri 生态独立 crate，不依赖 Tauri 本体）
+tray-icon = "0.19"
+# 全局热键（Tauri 生态独立 crate）
+global-hotkey = "0.6"
+
+[target.'cfg(windows)'.build-dependencies]
+# 构建脚本依赖：把应用图标嵌入 exe 资源（任务栏/资源管理器图标）
+winresource = "0.1"

@@ -1,0 +1,43 @@
+[workspace]
+members = ["backend", "app"]
+resolver = "2"
+
+[workspace.package]
+version = "0.3.0"
+edition = "2021"
+publish = false
+
+[workspace.dependencies]
+sap-backend = { path = "backend" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# gpui-component（长桥维护版 v0.6.1，GitHub 公开仓库）
+# 用 git 依赖替代本地 path，让 cargo 下载到 CARGO_HOME（C 盘，沙箱可见）
+# 用户终端可用 path = "../../gpui-component/crates/kit" 替代本地克隆
+gpui-kit = { git = "https://github.com/longbridge/gpui-component" }
+
+[profile.dev]
+codegen-units = 16
+debug = "limited"
+split-debuginfo = "unpacked"
+
+# 对渲染关键依赖启用 O3，保证 dev 模式 UI 流畅度（与 gpui-component workspace 对齐）
+[profile.dev.package]
+resvg = { opt-level = 3 }
+rustybuzz = { opt-level = 3 }
+taffy = { opt-level = 3 }
+ttf-parser = { opt-level = 3 }
+smol = { opt-level = 3 }
+gpui-pre = { opt-level = 3 }
+gpui-pre-platform = { opt-level = 3 }
+gpui-pre-macros = { opt-level = 3 }
+gpui-pre-sum-tree = { opt-level = 3 }
+ropey = { opt-level = 3 }
+
+[profile.release]
+# 注意：不启用 fat LTO——本机工具链的 LTO 链接会丢失部分被引用的字符串常量
+# （如「管理分组」「返回主界面」等 UI 文案），导致二进制损坏、界面文案/行为异常。
+# codegen-units=1 时 rustc 自动禁用 LTO，保留 O2 + 单编译单元已有足够优化。
+codegen-units = 1
+opt-level = 2
