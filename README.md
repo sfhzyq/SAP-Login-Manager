@@ -1,7 +1,7 @@
 # SAP Login Manager
 
 <p align="center">
-  一款为 SAP 顾问与运维人员打造的<strong>本地化、加密存储、一键登录</strong>桌面凭据管理工具。
+  一款为 SAP 顾问与运维人员打造的<strong>本地化、加密存储、一键登录</strong>SAP GUI桌面凭据管理工具。
 </p>
 
 <p align="center">
