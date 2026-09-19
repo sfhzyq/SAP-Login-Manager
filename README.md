@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-0.3.0-blue.svg" />
+  <img alt="version" src="https://img.shields.io/badge/version-0.4.0-blue.svg" />
   <img alt="platform" src="https://img.shields.io/badge/platform-Windows-0078D6.svg?logo=windows" />
   <img alt="Rust" src="https://img.shields.io/badge/Rust-stable-000000.svg?logo=rust" />
-  <img alt="memory" src="https://img.shields.io/badge/memory-~45MB-96CEB4.svg" />
+  <img alt="memory" src="https://img.shields.io/badge/memory-~30MB-96CEB4.svg" />
   <img alt="license" src="https://img.shields.io/badge/license-MIT-green.svg" />
 </p>
 
@@ -20,7 +20,7 @@
 
 在开源生态中，现有的 SAP 自动化项目要么没有 GUI（CLI / 脚本 / MCP），要么凭据明文存于 CSV / JSON。本项目的差异化定位：
 
-> **唯一同时具备「完整图形界面 + 强加密存储 + 一键登录」的开源 SAP 登录管理器**，且保持原生级资源占用（实测常驻约 45 MB 内存，无 WebView 运行时）。
+> **唯一同时具备「完整图形界面 + 强加密存储 + 一键登录」的开源 SAP 登录管理器**，且保持原生级资源占用（实测任务管理器内存约 17–20 MB，完整工作集含共享库约 50 MB；无 WebView 运行时）。
 
 > 🔒 **隐私优先**：凭据仅存储在你自己的电脑上，密钥由主密码派生，明文密码永不落盘。
 
@@ -44,8 +44,9 @@
 
 ### 登录与自动化
 - 一键启动 SAP Logon 并自动填充登录，双击卡片即登录
-- **批量登录**：多选（勾选 / Ctrl / Shift 范围选）后逐条执行，汇总成功明细
-- 从 `SAPUILandscape.xml` 导入连接；支持自定义 SAP Logon 路径
+- **批量登录**：多选（勾选 / Ctrl / Shift 范围选）后逐条执行，可配置间隔，汇总成功明细
+- 标题栏一键打开 SAP Logon：运行中自动置前台，未运行则启动；SAP Logon 路径可自定义
+- 从 `SAPUILandscape.xml` 导入连接
 - SNC 单点登录（SSO）凭据支持，负载均衡 / SAP Router 连接串
 
 ### 安全
@@ -53,14 +54,17 @@
 - 数据 **AES-256-GCM** 加密（带完整性认证）
 - **免密模式（Windows DPAPI）**：主密码密文与当前 Windows 账户绑定，离开本机 / 本账户无法解密
 - 主密码运行时以 `SecretString` 保存，销毁时内存清零（zeroize）
-- 剪贴板定时自动清空（可配置）、空闲自动锁定
+- 剪贴板定时自动清空（可配置）、空闲自动锁定（时长可配置，0 为禁用）
 - 备份导出 / 导入（加密凭据包），便于迁移与灾备
 
 ### 体验
-- 中文 / English 双语界面，亮色 / 暗色主题
+- 中文 / English 双语界面，亮色 / 暗色主题（活动栏一键切换）
+- 左侧活动栏集中入口：分组管理、导入 / 导出、主题切换、打开 SAP Logon
 - 环境色标识（左缘色条 + 浅底头像 + 环境标签，色弱友好）
-- 命令面板（`Ctrl+K`）、全局快捷键（`Ctrl+N` 新增 / `Ctrl+F` 搜索 / `Ctrl+L` 锁定）、键盘导航（`↑↓` 选择 / `Enter` 登录）
-- 系统托盘、开机自启、紧凑密度模式
+- 命令面板（`Ctrl+K`）、应用内快捷键（`Ctrl+N` 新增 / `Ctrl+F` 搜索 / `Ctrl+L` 锁定）、键盘导航（`↑↓` 选择 / `Enter` 登录）
+- **全局热键 `Ctrl+Shift+S`**：任意界面唤起窗口并弹出命令面板（Raycast 式入口）
+- 系统托盘（左键唤起主窗口；最小化 / 关闭到托盘可配置）、开机自启、紧凑密度模式
+- 窗口置顶开关、界面字体自定义
 
 ---
 
@@ -70,33 +74,52 @@
 
 ---
 
-## 📦 目录结构
+## 🏗️ 系统架构
 
-本仓库包含三个实现版本（共享同一数据格式）：
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-dark.png">
+  <img alt="SAP Login Manager GPUI 版系统架构图" src="docs/architecture-light.png">
+</picture>
 
-| 目录 | 版本 | 状态 |
-|---|---|---|
-| `gpui-version/` | **GPUI 原生版**（Rust + gpui-kit，GPU 加速自绘 UI） | ✅ 当前主力开发版本 |
-| `tauri-version/` | Tauri 2 + React + TypeScript 版 | 🗄 参照实现，可独立构建（CI 使用） |
-| `slint-app/` | Slint 版 | 🧪 技术探索 |
-| `archive/` | 历史归档（设计稿预览页、旧截图、特性规格） | 📦 仅存档 |
-
-- **GPUI 版构建**：仓库根执行 `.\build-gpui.ps1 [check|build|run] [debug|release]`，详见 `gpui-version/README.md`
-- **Tauri 版构建**：`tauri-version/` 内 `npm install && npm run tauri build`
+> 交互式架构图：**[docs/architecture.html](docs/architecture.html)** —— 单文件、离线可开，内置「解锁与数据主链路 / 一键登录 / 系统集成」三个视角视图与组件悬浮详情。图源 [docs/architecture.json](docs/architecture.json)（经 [Archify](https://github.com/tt-a1i/archify) showcase 质量校验生成）。
 
 ---
 
-## 🚀 快速开始（GPUI 版）
+## 📦 目录结构
 
-### 环境要求
+仓库本身就是 Cargo workspace，克隆后直接在根目录构建：
+
+```text
+sap-login-manager/
+├── app/                  # UI 层（sap-login-manager-gpui：GPUI + gpui-kit 组件库）
+├── backend/              # 业务与加密（sap-backend：凭据 / 加密 / SAP 自动化）
+├── vendor/
+│   └── gpui-pre-windows/ # gpui-pre 本地补丁（修复窗口左/右/底边缘缩放命中区）
+├── .cargo/config.toml    # 国内镜像源（rsproxy）加速依赖下载
+├── docs/                 # BUILDING.md 构建说明 + architecture.* 系统架构图（HTML / 图源 / 预览图）
+└── build.ps1             # 一键构建脚本（check / build / run × debug / release）
+```
+
+---
+
+## 🚀 快速开始
+
+### 方式一：下载成品（推荐）
+1. 前往 [Releases](https://github.com/sfhzyq/SAP-LoginManager/releases/latest) 下载 `sap-login-manager-gpui.exe`（约 25 MB 单文件，免安装、无运行时依赖）
+2. 将 exe 移到独立目录运行 —— 便携模式，首次启动自动创建同目录 `data\` 存储库
+3. 首次启动设置主密码即可使用；可在设置中开启「免密模式」（经 Windows DPAPI 与当前账户绑定）
+
+### 方式二：从源码构建
+
+#### 环境要求
 - Windows 10/11
 - [Rust](https://www.rust-lang.org/tools/install)（stable 工具链）
 
-### 构建与运行
+#### 构建与运行
 ```powershell
-.\build-gpui.ps1 check          # 快速编译检查
-.\build-gpui.ps1 build release  # release 构建
-.\build-gpui.ps1 run            # 编译并运行
+.\build.ps1 check          # 快速编译检查
+.\build.ps1 build release  # release 构建
+.\build.ps1 run            # 编译并运行
 ```
 或直接使用 cargo：
 ```powershell
@@ -109,7 +132,7 @@ cargo build --release -p sap-login-manager-gpui
 
 ---
 
-## 🧱 技术栈（GPUI 版）
+## 🧱 技术栈
 
 | 层 | 技术 |
 | --- | --- |
@@ -133,11 +156,17 @@ cargo build --release -p sap-login-manager-gpui
 
 ## 🗺️ 路线图
 
-- [ ] **SAP GUI Scripting 自动填充登录**（COM 接口，真·一键直达）
+### v0.4.0 · 界面打磨（进行中）
+- [x] 高频路径零动画（键盘导航 / 复制反馈即时响应；命令面板沿用库默认 250ms 动画，属已知例外）
+- [x] 全局按压反馈（卡片 / 弹层行 / 活动栏按下压暗自适应双主题，按钮按压色走主题 token）
+- [ ] ~~弹层动效统一~~（已取消：gpui-kit 动画常量硬编码，需 vendor 补丁，收益不抵成本）
+- [ ] ~~亮暗主题切换颜色过渡~~（已取消：需逐帧插值全局主题，侵入面大）
+
+### 功能规划
+- [ ] **SAP GUI Scripting 自动填充登录**（COM 接口，真·一键直达；现为 sapshcut.exe 方案）
 - [ ] 定时自动备份（加密导出 + 轮转保留）
-- [ ] GitHub Release 自动发布（tag 触发三平台构建产物）
+- [ ] GitHub Release 自动发布（tag 触发 Windows 构建产物）
 - [ ] 密码到期提醒 / 密码生成器
-- [ ] 全局热键呼出
 
 ---
 
