@@ -1,0 +1,19 @@
+SAP Login Manager · README 截图演示数据
+========================================
+
+这个文件夹是一个独立的"演示实例"：exe 读取同级 data\store.json（便携模式），
+
+用法
+----
+1. 双击本文件夹里的 sap-login-manager-gpui.exe
+2. 解锁页输入测试主密码：Demo@2026
+3. 主界面出现 12 条演示凭据（3 个自定义分组 + 环境折叠分组、
+   2 条置顶、4 条收藏、含负载均衡 / SAP Router / SNC 免密等形态）
+4. 截图完成后：直接删除整个 demo-data 文件夹即可
+
+提示
+----
+* 截图前建议先退出你日常使用的正式版实例，避免托盘/全局热键冲突
+* 亮色 / 暗色主题可在活动栏切换，README 用 <picture> 标签明暗各放一张
+* 数据是加密的（Argon2id + AES-256-GCM），与真实 store.json 格式一致，
+  由 backend/examples/seed_demo.rs 生成并自校验通过

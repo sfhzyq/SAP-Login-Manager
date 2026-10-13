@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+target/
+
+# Tauri
+gen/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Tool workspace data (local only)
+.workbuddy/
+.trae-html-share-packages/
+.uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+
+# Runtime data (凭据存储，含加密密码，不可提交)
+data/
+
+# Build artifacts
+*.exe
+*.dll
+*.pdb
+
+# Debug / diagnostic output (临时调试产物,不提交)
+tauri-version/src-tauri/stdout*.txt
+tauri-version/src-tauri/stderr*.txt
+app-screenshot-*.png

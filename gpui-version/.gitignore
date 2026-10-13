@@ -1,0 +1,32 @@
+# Build output
+target/
+
+# Runtime data (credential store with encrypted passwords - NEVER commit)
+**/data/
+
+# Build artifacts
+*.exe
+*.dll
+*.pdb
+
+# Logs
+*.log
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Local demo instance (seed_demo output) — 截图/说明/演示库随仓库提交，exe 由 *.exe 排除
+demo-data/**
+!demo-data/screenshot/
+!demo-data/screenshot/**
+!demo-data/使用说明.txt
+!demo-data/data/
+!demo-data/data/**

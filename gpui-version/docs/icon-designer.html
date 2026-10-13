@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>SAP Login Manager · 图标设计台</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #ffffff; --line: #e4e7ec;
+    --text: #1f2430; --sub: #6b7280; --accent: #4f46e5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font: 14px/1.6 "Segoe UI", "Microsoft YaHei", sans-serif; padding: 28px; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  .lead { color: var(--sub); margin-bottom: 20px; }
+  .wrap { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+  .card { background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 18px; }
+  .panel { width: 300px; flex: none; }
+  .panel h2, .stage h2 { font-size: 13px; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--sub); margin-bottom: 12px; }
+  .dir { display: grid; gap: 8px; }
+  .dir button { display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 10px; background: #fff;
+    cursor: pointer; text-align: left; font: inherit; }
+  .dir button.active { border-color: var(--accent); box-shadow: 0 0 0 2px #4f46e522; }
+  .dir canvas { width: 36px; height: 36px; border-radius: 8px; }
+  .dir small { display: block; color: var(--sub); }
+  .row { display: flex; align-items: center; justify-content: space-between;
+    margin-top: 14px; gap: 10px; }
+  .row label { color: var(--sub); }
+  input[type=color] { width: 44px; height: 28px; border: 1px solid var(--line);
+    border-radius: 6px; padding: 0; background: none; cursor: pointer; }
+  input[type=range] { width: 140px; }
+  .hint { color: var(--sub); font-size: 12px; margin-top: 10px; }
+  .stage { flex: 1; min-width: 520px; display: grid; gap: 16px; }
+  .hero { display: flex; gap: 18px; align-items: center; }
+  #heroIcon { width: 192px; height: 192px; border-radius: 40px;
+    box-shadow: 0 18px 40px #1f243026; }
+  .hero-meta { color: var(--sub); font-size: 13px; }
+  .strip { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .cell { text-align: center; }
+  .cell canvas { display: block; border-radius: 4px; margin: 0 auto; }
+  .cell span { font-size: 11px; color: var(--sub); }
+  .mock { border-radius: 10px; padding: 12px 14px; display: flex;
+    align-items: center; gap: 14px; }
+  .mock.taskbar { background: linear-gradient(180deg,#f3f3f3,#e9e9ee);
+    border: 1px solid var(--line); }
+  .mock.taskbar.dark { background: linear-gradient(180deg,#2b2b31,#202024);
+    border-color: #16161a; }
+  .mock.desktop { background: linear-gradient(135deg,#3b82f6,#8b5cf6 60%,#ec4899);
+    justify-content: center; padding: 22px; }
+  .mock .label { font-size: 12px; color: #6b7280; margin-right: 4px; }
+  .mock.dark .label { color: #9ca3af; }
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btns button { padding: 9px 16px; border-radius: 8px; border: 1px solid var(--line);
+    background: #fff; cursor: pointer; font: inherit; }
+  .btns button.primary { background: var(--accent); border-color: var(--accent);
+    color: #fff; }
+</style>
+</head>
+<body>
+<h1>APP 图标设计台</h1>
+<p class="lead">JS + Canvas 矢量参数化 · 三方向 · 16–256 全尺寸实时预览 · 导出 ICO（全 DIB 条目，兼容托盘 LoadImage 加载路径）</p>
+
+<div class="wrap">
+  <div class="card panel">
+    <h2>方向</h2>
+    <div class="dir" id="dirBtns">
+      <button data-dir="1"><canvas width="36" height="36" data-mini="1"></canvas>
+        <div>方向 1 · 挂锁<small>深蓝紫渐变 + 白色锁体，登录语义最直白</small></div></button>
+      <button data-dir="2"><canvas width="36" height="36" data-mini="1"></canvas>
+        <div>方向 2 · 钥匙<small>品牌蓝 + 抽象钥匙，凭据「钥匙串」隐喻</small></div></button>
+      <button data-dir="3"><canvas width="36" height="36" data-mini="1"></canvas>
+        <div>方向 3 · 终端<small>深色底 + &gt;_ + 角标锁，自动化气质</small></div></button>
+    </div>
+
+    <div class="row"><label>渐变起色</label><input type="color" id="bg1" value="#1e3a8a"></div>
+    <div class="row"><label>渐变止色</label><input type="color" id="bg2" value="#7c3aed"></div>
+    <div class="row"><label>前景色（符号）</label><input type="color" id="fg" value="#ffffff"></div>
+    <div class="row"><label>角标色（方向 3）</label><input type="color" id="badge" value="#f59e0b"></div>
+    <div class="row"><label>圆角 <span id="rVal">56</span></label>
+      <input type="range" id="radius" min="20" max="110" value="56"></div>
+    <div class="row"><label>≤32px 加粗笔画</label>
+      <input type="checkbox" id="bold" checked></div>
+    <p class="hint">16px 任务栏 / 托盘是硬约束：主符号笔画在该尺寸下 ≥1.5px，加粗开关默认开启。</p>
+  </div>
+
+  <div class="stage">
+    <div class="card">
+      <h2>主预览 · 256</h2>
+      <div class="hero">
+        <canvas id="heroIcon" width="256" height="256"></canvas>
+        <div class="hero-meta" id="heroMeta"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>实尺寸链 · 16 / 24 / 32 / 48 / 64 / 128 / 256</h2>
+      <div class="strip" id="strip"></div>
+    </div>
+
+    <div class="card">
+      <h2>场景模拟</h2>
+      <div class="mock taskbar"><span class="label">任务栏（浅色）</span>
+        <div class="strip" id="tbLight"></div></div>
+      <div class="mock taskbar dark" style="margin-top:10px"><span class="label">任务栏（深色）</span>
+        <div class="strip" id="tbDark"></div></div>
+      <div class="mock desktop" style="margin-top:10px"><div class="strip" id="desk"></div></div>
+      <div class="mock taskbar dark" style="margin-top:10px"><span class="label">托盘 16px</span>
+        <canvas id="tray16" width="16" height="16"></canvas>
+        <canvas id="trayPad" width="16" height="16"></canvas>
+        <span class="label" style="margin-left:6px">← 无边距 / 带 1.5px 内边距（托盘推荐）</span></div>
+    </div>
+
+    <div class="card">
+      <h2>导出</h2>
+      <div class="btns">
+        <button class="primary" id="dlIco">下载 icon.ico（7 尺寸全 DIB）</button>
+        <button id="dl256">下载 PNG 256</button>
+        <button id="dl128">下载 PNG 128</button>
+        <button id="dl48">下载 PNG 48</button>
+      </div>
+      <p class="hint">ICO 采用 32bpp DIB（BITMAPINFOHEADER + 自底向上 BGRA + AND 掩码）——
+        tray-icon 走 LoadImage 加载，不支持 PNG 压缩条目，全 DIB 才稳。
+        下载后替换仓库 app/icons/icon.ico 重编译即可全入口生效。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const SIZES = [16, 24, 32, 48, 64, 128, 256];
+const state = { dir: 1 };
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  r = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/* 256 坐标系矢量绘制，按 size 缩放 */
+function drawIcon(ctx, size, o) {
+  const k = size / 256;
+  ctx.save();
+  ctx.clearRect(0, 0, size, size);
+  ctx.scale(k, k);
+
+  // 底板：squircle + 对角渐变
+  const g = ctx.createLinearGradient(0, 0, 256, 256);
+  g.addColorStop(0, o.bg1); g.addColorStop(1, o.bg2);
+  roundRectPath(ctx, 8, 8, 240, 240, o.radius);
+  ctx.fillStyle = g; ctx.fill();
+
+  // 顶部细高光（Win11 质感）
+  ctx.strokeStyle = "rgba(255,255,255,.28)";
+  ctx.lineWidth = 5;
+  roundRectPath(ctx, 18, 15, 220, 8, 4);
+  ctx.stroke();
+
+  const boldK = (o.bold && size <= 32) ? 1.4 : 1;
+  const lw = n => n * boldK;
+  ctx.strokeStyle = o.fg; ctx.fillStyle = o.fg;
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+
+  if (o.dir === 1) {           // ── 方向 1 · 挂锁 ──
+    ctx.lineWidth = lw(21);
+    ctx.beginPath();                       // 锁梁
+    ctx.arc(128, 116, 50, Math.PI, 0);
+    ctx.stroke();
+    roundRectPath(ctx, 62, 116, 132, 94, 20);   // 锁体
+    ctx.fill();
+    ctx.fillStyle = o.bg1;                      // 锁孔（镂空到底色）
+    ctx.beginPath(); ctx.arc(128, 152, 15, 0, 7); ctx.fill();
+    ctx.fillRect(121, 156, 14, 30);
+  } else if (o.dir === 2) {    // ── 方向 2 · 钥匙 ──
+    ctx.lineWidth = lw(21);
+    ctx.beginPath(); ctx.arc(98, 98, 46, 0, 7); ctx.stroke();   // 钥匙环
+    ctx.beginPath(); ctx.moveTo(130, 130); ctx.lineTo(206, 206); ctx.stroke(); // 柄
+    ctx.beginPath();                       // 齿
+    ctx.moveTo(178, 178); ctx.lineTo(198, 158);
+    ctx.moveTo(196, 196); ctx.lineTo(216, 176);
+    ctx.stroke();
+  } else {                     // ── 方向 3 · 终端 ──
+    ctx.lineWidth = lw(23);
+    ctx.beginPath();                       // > 
+    ctx.moveTo(66, 84); ctx.lineTo(116, 130); ctx.lineTo(66, 176);
+    ctx.stroke();
+    ctx.beginPath();                       // _
+    ctx.moveTo(140, 176); ctx.lineTo(190, 176);
+    ctx.stroke();
+    // 角标锁（badge）
+    roundRectPath(ctx, 156, 156, 76, 76, 20);
+    ctx.fillStyle = o.badge; ctx.fill();
+    ctx.strokeStyle = "#ffffff"; ctx.fillStyle = "#ffffff";
+    ctx.lineWidth = lw(10);
+    ctx.beginPath(); ctx.arc(194, 190, 13, Math.PI, 0); ctx.stroke();
+    roundRectPath(ctx, 179, 190, 30, 26, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function opts() {
+  return {
+    dir: state.dir,
+    bg1: document.getElementById("bg1").value,
+    bg2: document.getElementById("bg2").value,
+    fg: document.getElementById("fg").value,
+    badge: document.getElementById("badge").value,
+    radius: +document.getElementById("radius").value,
+    bold: document.getElementById("bold").checked,
+  };
+}
+
+/* 每个 size 独立矢量重绘（非位图缩放），保证小尺寸笔画清晰 */
+const canvases = {};
+function renderAll() {
+  const o = opts();
+  drawIcon(document.getElementById("heroIcon").getContext("2d"), 256, o);
+  document.getElementById("heroMeta").textContent =
+    ["", "方向 1 · 挂锁", "方向 2 · 钥匙", "方向 3 · 终端"][o.dir] +
+    "　渐变 " + o.bg1 + " → " + o.bg2;
+
+  for (const s of SIZES) {
+    const c = canvases[s];
+    drawIcon(c.getContext("2d"), s, o);
+  }
+  // 托盘 16：无边距 / 带内边距（86% 居中）
+  drawIcon(document.getElementById("tray16").getContext("2d"), 16, o);
+  const padO = Object.assign({}, o, { radius: Math.min(o.radius + 18, 110) });
+  const pc = document.getElementById("trayPad").getContext("2d");
+  pc.clearRect(0, 0, 16, 16);
+  pc.save();
+  pc.translate(16 / 256 * 0.07, 16 / 256 * 0.07);   // 居中偏移
+  drawScaled(pc, 16 / 256 * 0.86, padO);
+  pc.restore();
+
+  // 迷你按钮预览
+  document.querySelectorAll("[data-mini]").forEach(c => {
+    const mini = Object.assign({}, o, { dir: +c.closest("button").dataset.dir });
+    const mc = c.getContext("2d");
+    mc.clearRect(0, 0, 36, 36);
+    drawScaled(mc, 36 / 256, mini);
+  });
+}
+
+/* 在已 scale 的 ctx 上直接绘制（用于非等比容器） */
+function drawScaled(ctx, k, o) {
+  ctx.save(); ctx.scale(k, k); drawIcon(ctx, 256, o); ctx.restore();
+}
+
+/* ── ICO 打包：全 DIB 32bpp 条目 ── */
+function makeIco() {
+  const parts = [], entries = [];
+  let offset = 6 + 16 * SIZES.length;
+  for (const s of SIZES) {
+    const c = canvases[s];
+    const img = c.getContext("2d").getImageData(0, 0, s, s).data;
+    const xor = new Uint8Array(s * s * 4);
+    for (let y = 0; y < s; y++) {
+      for (let x = 0; x < s; x++) {
+        const i = ((s - 1 - y) * s + x) * 4, o2 = (y * s + x) * 4;
+        xor[o2] = img[i + 2]; xor[o2 + 1] = img[i + 1];
+        xor[o2 + 2] = img[i]; xor[o2 + 3] = img[i + 3];
+      }
+    }
+    const andRow = Math.ceil(s / 32) * 4;
+    const and = new Uint8Array(andRow * s);
+    const h = new ArrayBuffer(40), v = new DataView(h);
+    v.setUint32(0, 40, true); v.setInt32(4, s, true); v.setInt32(8, 2 * s, true);
+    v.setUint16(12, 1, true); v.setUint16(14, 32, true);
+    v.setUint32(20, xor.length + and.length, true);
+    const total = 40 + xor.length + and.length;
+    entries.push({ s, total, offset });
+    parts.push(new Blob([h, xor, and]));
+    offset += total;
+  }
+  const head = new ArrayBuffer(6), hv = new DataView(head);
+  hv.setUint16(2, 1, true); hv.setUint16(4, entries.length, true);
+  const dir = new ArrayBuffer(16 * entries.length), dv = new DataView(dir);
+  entries.forEach((e, i) => {
+    const o2 = i * 16;
+    dv.setUint8(o2, e.s === 256 ? 0 : e.s); dv.setUint8(o2 + 1, e.s === 256 ? 0 : e.s);
+    dv.setUint16(o2 + 4, 1, true); dv.setUint16(o2 + 6, 32, true);
+    dv.setUint32(o2 + 8, e.total, true); dv.setUint32(o2 + 12, e.offset, true);
+  });
+  return new Blob([head, dir, ...parts], { type: "image/x-icon" });
+}
+
+function download(blob, name) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+}
+
+/* ── 初始化 UI ── */
+(function init() {
+  const strip = document.getElementById("strip");
+  for (const s of SIZES) {
+    const cell = document.createElement("div"); cell.className = "cell";
+    const c = document.createElement("canvas");
+    c.width = s; c.height = s; c.style.width = s + "px"; c.style.height = s + "px";
+    if (s <= 32) { c.style.background = "#fff"; c.style.outline = "1px solid #e4e7ec"; }
+    cell.appendChild(c);
+    const cap = document.createElement("span"); cap.textContent = s; cell.appendChild(cap);
+    strip.appendChild(cell); canvases[s] = c;
+  }
+  const place = (id, sizes) => {
+    const host = document.getElementById(id);
+    for (const s of sizes) {
+      const c = document.createElement("canvas");
+      c.width = s; c.height = s; c.style.width = s + "px"; c.style.height = s + "px";
+      host.appendChild(c); canvases[id + s] = c;
+    }
+  };
+  place("tbLight", [16, 24, 32]);
+  place("tbDark", [16, 24, 32]);
+  place("desk", [48, 128]);
+
+  // 渲染时同步所有画布
+  const _renderAll = renderAll;
+  renderAll = function () {
+    _renderAll();
+    for (const s of SIZES) {
+      const o = opts();
+      ["tbLight", "tbDark", "desk"].forEach(id => {
+        const c = canvases[id + s]; if (!c) return;
+        drawIcon(c.getContext("2d"), s, o);
+      });
+    }
+  };
+
+  document.getElementById("dirBtns").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    state.dir = +b.dataset.dir;
+    document.querySelectorAll("#dirBtns button").forEach(x =>
+      x.classList.toggle("active", x === b));
+    renderAll();
+  });
+  ["bg1", "bg2", "fg", "badge", "bold"].forEach(id =>
+    document.getElementById(id).addEventListener("input", renderAll));
+  document.getElementById("radius").addEventListener("input", e => {
+    document.getElementById("rVal").textContent = e.target.value; renderAll();
+  });
+
+  document.getElementById("dlIco").addEventListener("click", () =>
+    download(makeIco(), "icon.ico"));
+  document.getElementById("dl256").addEventListener("click", () =>
+    canvases[256].toBlob(b => download(b, "icon-256.png")));
+  document.getElementById("dl128").addEventListener("click", () =>
+    canvases[128].toBlob(b => download(b, "icon-128.png")));
+  document.getElementById("dl48").addEventListener("click", () =>
+    canvases[48].toBlob(b => download(b, "icon-48.png")));
+
+  document.querySelector('#dirBtns button[data-dir="1"]').classList.add("active");
+  renderAll();
+})();
+</script>
+</body>
+</html>
