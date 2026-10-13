@@ -97,7 +97,6 @@
 | `gpui-version/` | **GPUI 原生版**（Rust + gpui-kit，GPU 加速自绘 UI） | ✅ 当前主力开发版本 |
 | `tauri-version/` | Tauri 2 + React + TypeScript 版 | 🗄 参照实现，可独立构建（CI 使用） |
 | `slint-app/` | Slint 版 | 🧪 技术探索 |
-| `archive/` | 历史归档（设计稿预览页、旧截图、特性规格） | 📦 仅存档 |
 
 - **GPUI 版构建**：仓库根执行 `.\build-gpui.ps1 [check|build|run] [debug|release]`，详见 `gpui-version/README.md`
 - **Tauri 版构建**：`tauri-version/` 内 `npm install && npm run tauri build`
@@ -221,7 +220,6 @@ Unlike existing open-source SAP automation projects (CLI/script/MCP with no GUI,
 | `gpui-version/` | **Native GPUI** (Rust + gpui-kit, GPU-accelerated UI) | ✅ Active development |
 | `tauri-version/` | Tauri 2 + React + TypeScript | 🗄 Reference implementation (used by CI) |
 | `slint-app/` | Slint | 🧪 Experiment |
-| `archive/` | Historical archives (design previews, old screenshots, feature spec) | 📦 Archive only |
 
 ## Quick Start (GPUI version)
 
