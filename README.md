@@ -1,5 +1,7 @@
 # SAP Login Manager
 
+**简体中文** | [English](#english)
+
 <p align="center">
   一款为 SAP 顾问与运维人员打造的<strong>本地化、加密存储、一键登录</strong>桌面凭据管理工具。
 </p>
@@ -147,6 +149,16 @@ cargo build --release -p sap-login-manager-gpui
 
 ---
 
+## ⚠️ 免责声明
+
+- 本项目是**个人开源项目，与 SAP SE 无任何隶属、合作或认可关系**。"SAP" 及相关标识为 SAP SE 的商标或注册商标，本项目仅调用其客户端软件，名称引用仅用于描述兼容性。
+- 本工具用于保管企业系统凭据并**自动登录目标系统**。请使用者自行确认符合所在组织的信息安全政策与法律法规；因使用本工具产生的合规责任由使用者自行承担。
+- 数据仅保存在本地，**忘记主密码将无法恢复**；请定期使用内置备份导出功能自行备份。对因数据丢失、损坏或泄露造成的任何直接或间接损失，作者不承担责任。
+- 本项目按"现状"提供，不提供任何形式的明示或默示担保。**使用本项目所产生的一切后果由使用者自行承担，与本项目作者无关。**
+- 本项目仅供学习研究与合法用途。
+
+---
+
 ## 🤝 反馈
 
 - 问题与建议：[GitHub Issues](https://github.com/sfhzyq/SAP-Login-Manager/issues)
@@ -159,6 +171,8 @@ cargo build --release -p sap-login-manager-gpui
 ---
 
 # English
+
+[简体中文](#sap-login-manager) | **English**
 
 <p align="center">
   A <strong>local-first, encrypted, one-click logon</strong> desktop credential manager for SAP consultants and administrators.
@@ -224,6 +238,14 @@ Data is stored in `data/store.json` next to the exe (portable mode — copy the 
 ## Security
 
 The master password is never stored in plaintext — only its hash for verification. Encryption keys are derived from the master password + random salt via a versioned KDF (v1 = PBKDF2 600k, v2 = **Argon2id**, current latest); older stores are migrated automatically on unlock. All credential passwords are encrypted with AES-256-GCM (authenticated). The password-free mode encrypts the master password via Windows DPAPI, bound to the current Windows user account — the ciphertext is useless on any other machine or account.
+
+## Disclaimer
+
+- This is a **personal open-source project with no affiliation with, or endorsement by, SAP SE**. "SAP" and related marks are trademarks of SAP SE; this project merely automates their client software and references the name solely to describe compatibility.
+- This tool stores enterprise credentials and **automates logon to target systems**. Users are responsible for ensuring that such use complies with their organization's security policies and applicable laws.
+- Data is stored locally only; **a forgotten master password cannot be recovered**. Back up regularly via the built-in encrypted export feature. The author is not liable for any direct or indirect losses caused by data loss, corruption, or leakage.
+- The project is provided **"as is"**, without warranty of any kind. **All consequences arising from the use of this project are borne by the user and are unrelated to the author.**
+- For study and lawful use only.
 
 ## Feedback & License
 
