@@ -1,0 +1,5 @@
+# === GitHub 语言统计（Linguist）===
+# 归档的审查报告 / 架构文档 / 设计稿本质是文档，体积却高达数 MB，
+# 不排除它们的话 HTML 会盖过项目主体语言（Rust），使仓库徽标显示为 HTML。
+/archive/**            linguist-documentation
+/gpui-version/docs/**  linguist-documentation
