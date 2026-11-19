@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SAP Login Manager GPUI 版 · 系统架构",
+    "locale": "zh-CN",
+    "quality_profile": "showcase",
+    "views": [
+      { "id": "main-path", "label": "解锁与数据主链路", "focus": ["ui", "commands", "crypto", "storage", "store-file"], "note": "主密码经命令层进入加密核心，密文读写本地加密凭据库。" },
+      { "id": "sap-login", "label": "一键登录链路", "focus": ["ui", "commands", "sap-auto", "saplogon"], "note": "凭据交给 sapshcut.exe 启动 SAP Logon 并自动置前台。" },
+      { "id": "integration", "label": "系统集成", "focus": ["ui", "shell", "vendor"], "note": "托盘、全局热键事件泵与 DirectX 自绘平台层。" }
+    ]
+  },
+  "components": [
+    { "id": "shell", "type": "backend", "label": "应用外壳", "sublabel": "native_integration.rs", "tag": "托盘 · 全局热键", "pos": [60, 112], "size": [170, 64] },
+    { "id": "sap-parser", "type": "backend", "label": "连接导入", "sublabel": "XML 解析", "pos": [330, 112], "size": [180, 56] },
+    { "id": "landscape", "type": "external", "label": "SAPUILandscape.xml", "sublabel": "SAP 连接配置", "pos": [610, 112], "size": [170, 56] },
+    { "id": "ui", "type": "frontend", "label": "GPUI 桌面界面", "sublabel": "gpui-kit 组件库", "pos": [60, 288], "size": [170, 60] },
+    { "id": "commands", "type": "backend", "label": "sap-backend 命令层", "sublabel": "auth · credentials · sap", "pos": [330, 288], "size": [180, 60] },
+    { "id": "crypto", "type": "security", "label": "加密核心", "sublabel": "AES-256-GCM", "tag": "Argon2id / DPAPI", "pos": [610, 288], "size": [160, 64] },
+    { "id": "storage", "type": "database", "label": "本地存储", "sublabel": "storage.rs", "pos": [860, 288], "size": [160, 60] },
+    { "id": "vendor", "type": "external", "label": "gpui-pre-windows", "sublabel": "平台层本地补丁", "pos": [60, 448], "size": [170, 56] },
+    { "id": "sap-auto", "type": "backend", "label": "SAP 自动登录", "sublabel": "sapshcut.exe 方案", "pos": [330, 448], "size": [180, 56] },
+    { "id": "saplogon", "type": "external", "label": "SAP Logon", "sublabel": "外部 GUI 进程", "pos": [610, 448], "size": [170, 60] },
+    { "id": "store-file", "type": "database", "label": "data/store.json", "sublabel": "加密凭据库（便携）", "pos": [860, 448], "size": [160, 56] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "app crate · UI 层", "wraps": ["ui", "shell"] },
+    { "kind": "region", "label": "sap-backend · 业务与加密", "wraps": ["commands", "crypto", "storage", "sap-auto", "sap-parser"] },
+    { "kind": "security-group", "label": "加密边界 · 明文不出后端", "wraps": ["crypto"] }
+  ],
+  "connections": [
+    { "id": "ui-to-commands", "from": "ui", "to": "commands", "label": "命令调用", "variant": "emphasis" },
+    { "id": "commands-to-crypto", "from": "commands", "to": "crypto", "label": "加解密" },
+    { "id": "crypto-to-storage", "from": "crypto", "to": "storage", "label": "密文读写" },
+    { "id": "storage-to-file", "from": "storage", "to": "store-file", "fromSide": "bottom", "toSide": "top" },
+    { "id": "shell-to-ui", "from": "shell", "to": "ui", "label": "托盘 · 热键", "labelDy": 24 },
+    { "id": "ui-to-vendor", "from": "ui", "to": "vendor", "label": "GPU 自绘", "labelDy": 24 },
+    { "id": "commands-to-parser", "from": "commands", "to": "sap-parser", "fromSide": "top", "toSide": "bottom", "label": "导入" },
+    { "id": "parser-to-landscape", "from": "sap-parser", "to": "landscape", "label": "读取" },
+    { "id": "commands-to-auto", "from": "commands", "to": "sap-auto", "fromSide": "bottom", "toSide": "top", "label": "启动登录", "labelDy": 24 },
+    { "id": "auto-to-logon", "from": "sap-auto", "to": "saplogon", "label": "sapshcut.exe" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "层次", "items": ["app crate：GPUI 界面与系统集成", "sap-backend：命令、加密、存储、SAP 自动化", "vendor：gpui-pre-windows 平台层补丁"] },
+    { "dot": "emerald", "title": "数据", "items": ["凭据以 AES-256-GCM 加密存于 data/store.json", "KDF 版本化路由：Argon2id / PBKDF2 自动迁移", "免密模式经 DPAPI 绑定当前 Windows 账户"] },
+    { "dot": "rose", "title": "外部交互", "items": ["sapshcut.exe 启动 SAP Logon 并自动置前台", "从 SAPUILandscape.xml 一键导入连接", "托盘左键唤起 + 全局热键 Ctrl+Shift+S"] }
+  ]
+}

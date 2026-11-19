@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活动栏+可折叠分组边栏 完整方案</title>
+<style>
+body{margin:0;padding:20px;background:#f5f6f8;font-family:system-ui,-apple-system,sans-serif;color:#2c2c2a}
+h2{font-size:15px;font-weight:500;margin:28px 0 8px}
+p.desc{font-size:13px;color:#5f5e5a;line-height:1.6;margin:0 0 12px}
+svg{max-width:100%;height:auto;display:block;margin:0 auto 28px;border-radius:8px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+</style>
+</head>
+<body>
+
+<h2>展开态：活动栏 48px + 分组边栏 150px + 列表区</h2>
+<p class="desc">第一个按钮（☰）点击展开/收起分组边栏。边栏内含分组列表 + 底部「管理分组」入口。其余功能按钮（新增/主题/设置/更多/锁定）在活动栏竖排。</p>
+
+<svg viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>展开态完整布局</title>
+  <style>
+    .bg{fill:#eef0f6}.wb{fill:#fafbfc;stroke:#dde1ec;stroke-width:0.5}.card{fill:#fff;stroke:#dde1ec;stroke-width:0.5}
+    .side{fill:#f0f1f5;stroke:#dde1ec;stroke-width:0.5}
+    .sel{fill:#e6f1fb;stroke:#85b7eb;stroke-width:0.5}
+    .t1{font-size:12px;font-family:ui-sans-serif,system-ui;fill:#2c2c2a;font-weight:500}
+    .t2{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#5f5e5a;font-weight:400}
+    .t3{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#888780;font-weight:400}
+    .tw{font-size:9px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:600}
+    .tb{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:500}
+    .tg{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#185fa5;font-weight:500}
+    .ab{fill:#1a1d2e}
+    .ab2{fill:#262a3a}
+  </style>
+
+  <!-- 窗口框 -->
+  <rect x="10" y="10" width="660" height="460" class="wb" rx="10"/>
+
+  <!-- 活动栏 48px -->
+  <rect x="10" y="10" width="48" height="460" class="ab" rx="10"/>
+  <!-- logo -->
+  <rect x="20" y="22" width="28" height="28" fill="#007aff" rx="7"/>
+  <text x="34" y="41" text-anchor="middle" class="tw">S</text>
+  <line x1="10" y1="58" x2="58" y2="58" stroke="#3a3f55" stroke-width="0.5"/>
+  <!-- ☰ 分组边栏切换（选中态） -->
+  <rect x="18" y="66" width="32" height="32" class="ab2" rx="8"/>
+  <rect x="18" y="66" width="3" height="32" fill="#007aff" rx="1"/>
+  <text x="34" y="87" text-anchor="middle" font-size="14px" fill="#007aff" font-family="ui-sans-serif,system-ui" font-weight="500">☰</text>
+  <text x="70" y="84" class="tg" font-size="11px">☰ 分组边栏（点击展开/收起）</text>
+  <!-- ＋ 新增 -->
+  <rect x="20" y="104" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="123" text-anchor="middle" font-size="14px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">＋</text>
+  <text x="70" y="122" class="t2">＋ 新增凭据</text>
+  <!-- ◑ 主题 -->
+  <rect x="20" y="138" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="157" text-anchor="middle" font-size="13px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">◑</text>
+  <text x="70" y="156" class="t2">◑ 主题切换</text>
+  <!-- ⚙ 设置 -->
+  <rect x="20" y="172" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="191" text-anchor="middle" font-size="13px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">⚙</text>
+  <text x="70" y="190" class="t2">⚙ 设置</text>
+  <!-- ⋯ 更多 -->
+  <rect x="20" y="206" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="225" text-anchor="middle" font-size="13px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">⋯</text>
+  <text x="70" y="224" class="t2">⋯ 更多（导入/导出/关于）</text>
+
+  <line x1="10" y1="428" x2="58" y2="428" stroke="#3a3f55" stroke-width="0.5"/>
+  <!-- 🔒 锁定 -->
+  <rect x="20" y="438" width="28" height="22" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="6"/>
+  <text x="34" y="453" text-anchor="middle" font-size="12px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">🔒</text>
+  <text x="70" y="453" class="t2">🔒 锁定</text>
+
+  <!-- 分组边栏 150px -->
+  <rect x="58" y="10" width="150" height="460" class="side"/>
+  <!-- 边栏头 -->
+  <text x="70" y="30" class="t1">分组</text>
+  <text x="192" y="30" text-anchor="end" class="t3">12 项</text>
+  <line x1="58" y1="38" x2="208" y2="38" stroke="#dde1ec" stroke-width="0.5"/>
+  <!-- 全部(选中) -->
+  <rect x="64" y="46" width="138" height="24" class="sel" rx="4"/>
+  <rect x="64" y="46" width="3" height="24" fill="#185fa5" rx="1.5"/>
+  <text x="74" y="62" class="t1">全部</text>
+  <text x="194" y="62" text-anchor="end" class="t3">12</text>
+  <!-- 收藏 -->
+  <rect x="64" y="74" width="138" height="24" fill="none" rx="4"/>
+  <text x="74" y="90" class="t2">★ 收藏</text>
+  <text x="194" y="90" text-anchor="end" class="t3">3</text>
+  <!-- 分区标题 -->
+  <text x="70" y="112" class="t3">系统 / 默认</text>
+  <rect x="64" y="116" width="138" height="22" fill="none" rx="4"/>
+  <text x="74" y="130" class="t2">默认分组</text>
+  <text x="194" y="130" text-anchor="end" class="t3">12</text>
+  <rect x="64" y="140" width="138" height="22" fill="none" rx="4"/>
+  <rect x="68" y="144" width="3" height="14" fill="#da1e28" rx="1"/>
+  <text x="74" y="154" class="t2">生产环境</text>
+  <text x="194" y="154" text-anchor="end" class="t3">5</text>
+  <rect x="64" y="164" width="138" height="22" fill="none" rx="4"/>
+  <rect x="68" y="168" width="3" height="14" fill="#f1c21b" rx="1"/>
+  <text x="74" y="178" class="t2">测试环境</text>
+  <text x="194" y="178" text-anchor="end" class="t3">4</text>
+  <rect x="64" y="188" width="138" height="22" fill="none" rx="4"/>
+  <rect x="68" y="192" width="3" height="14" fill="#198038" rx="1"/>
+  <text x="74" y="202" class="t2">开发环境</text>
+  <text x="194" y="202" text-anchor="end" class="t3">2</text>
+  <rect x="64" y="212" width="138" height="22" fill="none" rx="4"/>
+  <rect x="68" y="216" width="3" height="14" fill="#8a3ffc" rx="1"/>
+  <text x="74" y="226" class="t2">配置环境</text>
+  <text x="194" y="226" text-anchor="end" class="t3">1</text>
+  <!-- 自定义区 -->
+  <text x="70" y="248" class="t3">自定义</text>
+  <rect x="64" y="252" width="138" height="22" fill="none" rx="4"/>
+  <text x="74" y="266" class="t2">自定义A</text>
+  <text x="194" y="266" text-anchor="end" class="t3">1</text>
+  <rect x="64" y="276" width="138" height="22" fill="none" rx="4"/>
+  <text x="74" y="290" class="t2">自定义B</text>
+  <text x="194" y="290" text-anchor="end" class="t3">1</text>
+  <text x="74" y="312" class="t3">…更多可滚动</text>
+  <!-- 底部管理 -->
+  <line x1="58" y1="420" x2="208" y2="420" stroke="#dde1ec" stroke-width="0.5"/>
+  <rect x="64" y="428" width="138" height="26" fill="none" rx="4"/>
+  <text x="74" y="445" class="t2">⚙ 管理分组</text>
+  <text x="194" y="445" text-anchor="end" class="t3">＞</text>
+  <text x="70" y="462" class="t3">新建 · 重命名 · 删除</text>
+
+  <!-- 列表区 -->
+  <rect x="208" y="10" width="462" height="460" class="bg"/>
+  <!-- 搜索行 -->
+  <rect x="220" y="20" width="350" height="26" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="230" y="37" class="t3">搜索 名称/系统/用户名/描述/服务器…</text>
+  <text x="580" y="37" class="t3">12 结果</text>
+  <rect x="594" y="20" width="28" height="26" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="608" y="37" text-anchor="middle" class="t3">排序</text>
+  <rect x="626" y="20" width="28" height="26" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="640" y="37" text-anchor="middle" class="t3">紧凑</text>
+  <!-- 卡片1 hover -->
+  <rect x="220" y="54" width="438" height="44" class="card" rx="8"/>
+  <rect x="224" y="58" width="3" height="36" fill="#da1e28" rx="1.5"/>
+  <rect x="234" y="62" width="28" height="28" fill="#da1e28" rx="6"/>
+  <text x="248" y="80" text-anchor="middle" class="tw">PRD</text>
+  <text x="270" y="72" class="t1">SAP-PRD-100 生产系统</text>
+  <rect x="402" y="66" width="24" height="12" fill="#eef0f6" rx="2"/>
+  <text x="414" y="75" text-anchor="middle" class="t3">100</text>
+  <text x="270" y="90" class="t2">USER01 · svc.example.com · ZH</text>
+  <rect x="586" y="66" width="40" height="20" fill="#007aff" rx="5"/>
+  <text x="606" y="80" text-anchor="middle" class="tb">登录</text>
+  <rect x="630" y="66" width="18" height="20" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="4"/>
+  <text x="639" y="80" text-anchor="middle" class="t3">★</text>
+  <!-- 卡片2 -->
+  <rect x="220" y="104" width="438" height="44" class="card" rx="8"/>
+  <rect x="224" y="108" width="3" height="36" fill="#198038" rx="1.5"/>
+  <rect x="234" y="112" width="28" height="28" fill="#198038" rx="6"/>
+  <text x="248" y="130" text-anchor="middle" class="tw">DEV</text>
+  <text x="270" y="122" class="t1">SAP-DEV-200 开发系统</text>
+  <text x="270" y="138" class="t2">DEVUSER · ZH</text>
+  <rect x="594" y="116" width="40" height="20" fill="#007aff" rx="5"/>
+  <text x="614" y="130" text-anchor="middle" class="tb">登录</text>
+  <!-- 卡片3 -->
+  <rect x="220" y="154" width="438" height="44" class="card" rx="8"/>
+  <rect x="224" y="158" width="3" height="36" fill="#f1c21b" rx="1.5"/>
+  <rect x="234" y="162" width="28" height="28" fill="#f1c21b" rx="6"/>
+  <text x="248" y="180" text-anchor="middle" class="tw">TST</text>
+  <text x="270" y="172" class="t1">SAP-TST-300 测试系统</text>
+  <text x="270" y="188" class="t2">TSTUSER · ZH</text>
+  <rect x="594" y="166" width="40" height="20" fill="#007aff" rx="5"/>
+  <text x="614" y="180" text-anchor="middle" class="tb">登录</text>
+  <!-- 卡片4 -->
+  <rect x="220" y="204" width="438" height="44" class="card" rx="8"/>
+  <rect x="224" y="208" width="3" height="36" fill="#8a3ffc" rx="1.5"/>
+  <rect x="234" y="212" width="28" height="28" fill="#8a3ffc" rx="6"/>
+  <text x="248" y="230" text-anchor="middle" class="tw">CNF</text>
+  <text x="270" y="222" class="t1">SAP-CFG-400 配置系统</text>
+  <text x="270" y="238" class="t2">CFGUSER · ZH</text>
+  <rect x="594" y="216" width="40" height="20" fill="#007aff" rx="5"/>
+  <text x="614" y="230" text-anchor="middle" class="tb">登录</text>
+  <!-- 卡片5 -->
+  <rect x="220" y="254" width="438" height="44" class="card" rx="8"/>
+  <rect x="224" y="258" width="3" height="36" fill="#6b7280" rx="1.5"/>
+  <rect x="234" y="262" width="28" height="28" fill="#6b7280" rx="6"/>
+  <text x="248" y="280" text-anchor="middle" class="tw">SYS</text>
+  <text x="270" y="272" class="t1">SAP-SYS-500</text>
+  <text x="270" y="288" class="t2">SYSUSER · ZH</text>
+  <rect x="594" y="266" width="40" height="20" fill="#007aff" rx="5"/>
+  <text x="614" y="280" text-anchor="middle" class="tb">登录</text>
+  <!-- 浮动批量栏 -->
+  <rect x="300" y="410" width="280" height="34" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="17"/>
+  <text x="316" y="432" class="t1">已选 2 项</text>
+  <rect x="386" y="418" width="1" height="18" fill="#dde1ec"/>
+  <text x="396" y="432" class="t2">全选 登录 收藏 移动 删除 取消</text>
+</svg>
+
+<h2>收起态：活动栏 48px + 列表区占满</h2>
+<p class="desc">点 ☰ 收起边栏后，列表区多出 150px 宽度。活动栏的 ☰ 按钮取消选中态（变回普通图标）。</p>
+
+<svg viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>收起态完整布局</title>
+  <style>
+    .bg{fill:#eef0f6}.wb{fill:#fafbfc;stroke:#dde1ec;stroke-width:0.5}.card{fill:#fff;stroke:#dde1ec;stroke-width:0.5}
+    .t1{font-size:12px;font-family:ui-sans-serif,system-ui;fill:#2c2c2a;font-weight:500}
+    .t2{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#5f5e5a;font-weight:400}
+    .t3{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#888780;font-weight:400}
+    .tw{font-size:9px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:600}
+    .tb{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:500}
+    .tg{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#185fa5;font-weight:500}
+    .ab{fill:#1a1d2e}
+  </style>
+  <rect x="10" y="10" width="660" height="460" class="wb" rx="10"/>
+  <!-- 活动栏 -->
+  <rect x="10" y="10" width="48" height="460" class="ab" rx="10"/>
+  <rect x="20" y="22" width="28" height="28" fill="#007aff" rx="7"/>
+  <text x="34" y="41" text-anchor="middle" class="tw">S</text>
+  <line x1="10" y1="58" x2="58" y2="58" stroke="#3a3f55" stroke-width="0.5"/>
+  <!-- ☰ 未选中 -->
+  <rect x="20" y="66" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="85" text-anchor="middle" font-size="14px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">☰</text>
+  <text x="70" y="84" class="tg">☰ 点击展开边栏</text>
+  <!-- ＋ -->
+  <rect x="20" y="104" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="123" text-anchor="middle" font-size="14px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">＋</text>
+  <text x="70" y="122" class="t2">＋ 新增凭据</text>
+  <!-- ◑ -->
+  <rect x="20" y="138" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="157" text-anchor="middle" font-size="13px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">◑</text>
+  <text x="70" y="156" class="t2">◑ 主题切换</text>
+  <!-- ⚙ -->
+  <rect x="20" y="172" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="191" text-anchor="middle" font-size="13px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">⚙</text>
+  <text x="70" y="190" class="t2">⚙ 设置</text>
+  <!-- ⋯ -->
+  <rect x="20" y="206" width="28" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="34" y="225" text-anchor="middle" font-size="13px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">⋯</text>
+  <text x="70" y="224" class="t2">⋯ 更多</text>
+  <line x1="10" y1="428" x2="58" y2="428" stroke="#3a3f55" stroke-width="0.5"/>
+  <rect x="20" y="438" width="28" height="22" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="6"/>
+  <text x="34" y="453" text-anchor="middle" font-size="12px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">🔒</text>
+  <text x="70" y="453" class="t2">🔒 锁定</text>
+
+  <!-- 列表区占满 -->
+  <rect x="58" y="10" width="612" height="460" class="bg"/>
+  <rect x="70" y="20" width="500" height="26" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="80" y="37" class="t3">搜索 名称/系统/用户名/描述/服务器…</text>
+  <text x="580" y="37" class="t3">12 结果</text>
+  <rect x="594" y="20" width="28" height="26" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="608" y="37" text-anchor="middle" class="t3">排序</text>
+  <rect x="626" y="20" width="28" height="26" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="640" y="37" text-anchor="middle" class="t3">紧凑</text>
+  <!-- 卡片们 -->
+  <rect x="70" y="54" width="588" height="44" class="card" rx="8"/>
+  <rect x="74" y="58" width="3" height="36" fill="#da1e28" rx="1.5"/>
+  <rect x="84" y="62" width="28" height="28" fill="#da1e28" rx="6"/>
+  <text x="98" y="80" text-anchor="middle" class="tw">PRD</text>
+  <text x="120" y="72" class="t1">SAP-PRD-100 生产系统</text>
+  <text x="120" y="90" class="t2">USER01 · svc.example.com · ZH</text>
+  <rect x="602" y="66" width="44" height="20" fill="#007aff" rx="5"/>
+  <text x="624" y="80" text-anchor="middle" class="tb">登录</text>
+  <rect x="70" y="104" width="588" height="44" class="card" rx="8"/>
+  <rect x="74" y="108" width="3" height="36" fill="#198038" rx="1.5"/>
+  <rect x="84" y="112" width="28" height="28" fill="#198038" rx="6"/>
+  <text x="98" y="130" text-anchor="middle" class="tw">DEV</text>
+  <text x="120" y="122" class="t1">SAP-DEV-200 开发系统</text>
+  <text x="120" y="138" class="t2">DEVUSER · ZH</text>
+  <rect x="602" y="116" width="44" height="20" fill="#007aff" rx="5"/>
+  <text x="624" y="130" text-anchor="middle" class="tb">登录</text>
+  <rect x="70" y="154" width="588" height="44" class="card" rx="8"/>
+  <rect x="74" y="158" width="3" height="36" fill="#f1c21b" rx="1.5"/>
+  <rect x="84" y="162" width="28" height="28" fill="#f1c21b" rx="6"/>
+  <text x="98" y="180" text-anchor="middle" class="tw">TST</text>
+  <text x="120" y="172" class="t1">SAP-TST-300 测试系统</text>
+  <text x="120" y="188" class="t2">TSTUSER · ZH</text>
+  <rect x="602" y="166" width="44" height="20" fill="#007aff" rx="5"/>
+  <text x="624" y="180" text-anchor="middle" class="tb">登录</text>
+  <rect x="70" y="204" width="588" height="44" class="card" rx="8"/>
+  <rect x="74" y="208" width="3" height="36" fill="#8a3ffc" rx="1.5"/>
+  <rect x="84" y="212" width="28" height="28" fill="#8a3ffc" rx="6"/>
+  <text x="98" y="230" text-anchor="middle" class="tw">CNF</text>
+  <text x="120" y="222" class="t1">SAP-CFG-400 配置系统</text>
+  <text x="120" y="238" class="t2">CFGUSER · ZH</text>
+  <rect x="602" y="216" width="44" height="20" fill="#007aff" rx="5"/>
+  <text x="624" y="230" text-anchor="middle" class="tb">登录</text>
+  <rect x="70" y="254" width="588" height="44" class="card" rx="8"/>
+  <rect x="74" y="258" width="3" height="36" fill="#6b7280" rx="1.5"/>
+  <rect x="84" y="262" width="28" height="28" fill="#6b7280" rx="6"/>
+  <text x="98" y="280" text-anchor="middle" class="tw">SYS</text>
+  <text x="120" y="272" class="t1">SAP-SYS-500</text>
+  <text x="120" y="288" class="t2">SYSUSER · ZH</text>
+  <rect x="602" y="266" width="44" height="20" fill="#007aff" rx="5"/>
+  <text x="624" y="280" text-anchor="middle" class="tb">登录</text>
+  <rect x="70" y="304" width="588" height="44" class="card" rx="8"/>
+  <rect x="74" y="308" width="3" height="36" fill="#da1e28" rx="1.5"/>
+  <rect x="84" y="312" width="28" height="28" fill="#da1e28" rx="6"/>
+  <text x="98" y="330" text-anchor="middle" class="tw">PR2</text>
+  <text x="120" y="322" class="t1">SAP-PRD-110 生产系统2</text>
+  <text x="120" y="338" class="t2">USER02 · ZH</text>
+  <rect x="602" y="316" width="44" height="20" fill="#007aff" rx="5"/>
+  <text x="624" y="330" text-anchor="middle" class="tb">登录</text>
+  <!-- 批量栏 -->
+  <rect x="320" y="410" width="280" height="34" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="17"/>
+  <text x="336" y="432" class="t1">已选 2 项</text>
+  <rect x="406" y="418" width="1" height="18" fill="#dde1ec"/>
+  <text x="416" y="432" class="t2">全选 登录 收藏 移动 删除 取消</text>
+</svg>
+
+<h2>活动栏按钮顺序与功能</h2>
+<p class="desc">从上到下：logo → ☰分组切换 → ＋新增 → ◑主题 → ⚙设置 → ⋯更多 → 分隔 → 🔒锁定。深色底（#1a1d2e）让活动栏与内容区形成层次。</p>
+
+<svg viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>活动栏按钮详解</title>
+  <style>
+    .ab{fill:#1a1d2e}.ab2{fill:#262a3a}
+    .t1{font-size:12px;font-family:ui-sans-serif,system-ui;fill:#2c2c2a;font-weight:500}
+    .t2{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#5f5e5a;font-weight:400}
+    .t3{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#888780;font-weight:400}
+    .tw{font-size:9px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:600}
+    .tg{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#185fa5;font-weight:500}
+    .line{stroke:#3a3f55;stroke-width:0.5}
+  </style>
+  <rect x="40" y="10" width="80" height="360" class="ab" rx="8"/>
+
+  <!-- logo -->
+  <rect x="56" y="24" width="32" height="32" fill="#007aff" rx="8"/>
+  <text x="72" y="45" text-anchor="middle" class="tw">S</text>
+  <text x="136" y="44" class="t1">应用图标（点击无操作 / 或显示关于）</text>
+  <line x1="48" y1="66" x2="120" y2="66" class="line"/>
+
+  <!-- ☰ 分组边栏切换 -->
+  <rect x="52" y="76" width="40" height="36" class="ab2" rx="8"/>
+  <rect x="52" y="76" width="3" height="36" fill="#007aff" rx="1"/>
+  <text x="72" y="99" text-anchor="middle" font-size="16px" fill="#007aff" font-family="ui-sans-serif,system-ui" font-weight="500">☰</text>
+  <text x="136" y="96" class="tg">☰ 分组边栏开关（选中态：蓝左条+深底）</text>
+  <text x="136" y="112" class="t2">点击展开/收起左侧分组边栏</text>
+
+  <!-- ＋ -->
+  <rect x="56" y="120" width="32" height="32" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="8"/>
+  <text x="72" y="141" text-anchor="middle" font-size="16px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">＋</text>
+  <text x="136" y="140" class="t2">＋ 新增凭据（打开 credential_form 弹窗）</text>
+
+  <!-- ◑ -->
+  <rect x="56" y="160" width="32" height="32" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="8"/>
+  <text x="72" y="181" text-anchor="middle" font-size="15px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">◑</text>
+  <text x="136" y="180" class="t2">◑ 主题切换（弹出浅色/深色/跟随系统菜单）</text>
+
+  <!-- ⚙ -->
+  <rect x="56" y="200" width="32" height="32" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="8"/>
+  <text x="72" y="221" text-anchor="middle" font-size="15px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">⚙</text>
+  <text x="136" y="220" class="t2">⚙ 设置（打开设置弹窗）</text>
+
+  <!-- ⋯ -->
+  <rect x="56" y="240" width="32" height="32" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="8"/>
+  <text x="72" y="261" text-anchor="middle" font-size="15px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">⋯</text>
+  <text x="136" y="260" class="t2">⋯ 更多（导入SAP / 导出凭据 / 关于）</text>
+
+  <line x1="48" y1="284" x2="120" y2="284" class="line"/>
+
+  <!-- 🔒 -->
+  <rect x="56" y="296" width="32" height="28" fill="none" stroke="#5f5e5a" stroke-width="0.5" rx="7"/>
+  <text x="72" y="315" text-anchor="middle" font-size="14px" fill="#8b92a8" font-family="ui-sans-serif,system-ui">🔒</text>
+  <text x="136" y="314" class="t2">🔒 锁定（回到解锁页）</text>
+
+  <!-- 标注 -->
+  <rect x="330" y="290" width="320" height="70" fill="#fafafa" stroke="#dde1ec" stroke-width="0.5" rx="8"/>
+  <text x="346" y="310" class="t1">分组管理入口</text>
+  <text x="346" y="328" class="t2">边栏底部「⚙ 管理分组」→ 打开 group_manager 弹窗</text>
+  <text x="346" y="346" class="t3">新建 · 重命名 · 删除（含 move/delete 两模式）</text>
+</svg>
+
+</body>
+</html>

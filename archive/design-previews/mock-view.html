@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP Login Manager - Mock 视图</title>
+<style>
+:root {
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e8ecf1;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border-color: #e5e7eb;
+  --accent: #0f62fe;
+  --accent-hover: #0043ce;
+  --accent-light: #d0e2ff;
+  --danger: #da1e28;
+  --success: #198038;
+  --warning: #f1c21b;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow: hidden;
+}
+#root { width: 100%; height: 100vh; display: flex; flex-direction: column; position: relative; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+*:hover::-webkit-scrollbar-thumb { background: var(--text-muted); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 16px; border: none; border-radius: var(--radius);
+  font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+
+[data-tooltip] { position: relative; }
+[data-tooltip]::after {
+  content: attr(data-tooltip); position: absolute; top: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%); background: var(--bg-tertiary); color: var(--text-primary);
+  padding: 3px 8px; border-radius: 4px; font-size: 10px; white-space: nowrap;
+  pointer-events: none; opacity: 0; transition: opacity 0.15s ease; z-index: 9999;
+  border: 1px solid var(--border-color);
+}
+[data-tooltip]:hover::after { opacity: 1; }
+[data-tooltip-pos="top"]::after { top: auto; bottom: calc(100% + 6px); }
+
+.input {
+  width: 100%; padding: 8px 12px 8px 32px; border: 1px solid var(--border-color);
+  border-radius: var(--radius); background: var(--bg-secondary); color: var(--text-primary);
+  font-size: 13px; outline: none; transition: all 0.2s;
+}
+.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+
+.card {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 8px; padding: 16px; box-shadow: var(--shadow);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); transform: translateY(-1px); }
+
+.sidebar-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 4px;
+  padding: 6px 10px; border-radius: 6px; cursor: pointer; margin-bottom: 2px;
+  font-size: 12px; transition: all 0.15s ease; position: relative;
+}
+.sidebar-item > span:first-child { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+.sidebar-item > span:last-child { flex-shrink: 0; font-size: 9px; color: var(--text-muted); }
+.sidebar-item:hover { background: var(--bg-tertiary); }
+.sidebar-item.active { background: var(--accent-light); color: var(--accent); }
+.sidebar-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 60%; background: var(--accent); border-radius: 0 2px 2px 0;
+}
+.sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; padding: 0 4px; }
+.sidebar-header-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.sidebar-section-header {
+  display: flex; align-items: center; gap: 4px; padding: 4px 8px; cursor: pointer;
+  font-size: 9px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.5px; user-select: none;
+}
+.sidebar-section-header:hover { color: var(--text-secondary); }
+.sidebar-header-btn {
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; border: none; background: transparent; color: var(--text-muted);
+  cursor: pointer; transition: all 0.15s ease;
+}
+.sidebar-header-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+
+.cred-actions { opacity: 0; transition: opacity 0.15s ease; }
+.card:hover .cred-actions { opacity: 1; }
+
+.toast-container {
+  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 2000;
+  display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none;
+}
+.toast {
+  padding: 10px 16px; border-radius: var(--radius); font-size: 12px;
+  box-shadow: var(--shadow-lg); pointer-events: auto; width: 100%; text-align: center;
+}
+.toast-success { background: var(--success); color: white; }
+
+.mock-badge {
+  position: fixed; top: 8px; right: 50%; transform: translateX(50%); z-index: 9999;
+  background: var(--warning); color: #1a1a2e; font-size: 10px; font-weight: 700;
+  padding: 2px 10px; border-radius: 10px; pointer-events: none;
+}
+</style>
+</head>
+<body>
+<div id="root">
+  <div class="mock-badge">MOCK 视图 · 模拟数据</div>
+
+  <!-- 标题栏 -->
+  <header data-tauri-drag-region style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.04); z-index: 10;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="展开/折叠分组">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="9" y1="3" x2="9" y2="21" /></svg>
+      </button>
+      <h1 style="font-size: 14px; font-weight: 700;">SAP Login Manager</h1>
+    </div>
+    <div style="display: flex; gap: 2px;">
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="收藏">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="锁定">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="启动 SAP Logon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="切换亮/暗主题">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="添加凭据">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="从 SAP 配置导入">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="导出配置">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="设置">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+      </button>
+      <div style="width: 1px; height: 16px; background: var(--border-color); margin: 0 4px;"></div>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="窗口置顶">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 17v5" /><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="最小化">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" style="padding: 5px; display: flex; align-items: center;" data-tooltip="关闭">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+      </button>
+    </div>
+  </header>
+
+  <div style="display: flex; flex: 1; overflow: hidden;">
+    <!-- 侧边栏 -->
+    <aside style="width: 170px; background: var(--bg-secondary); border-right: 1px solid var(--border-color); padding: 8px; display: flex; flex-direction: column; flexShrink: 0; overflow: hidden;">
+      <div class="sidebar-header">
+        <span class="sidebar-header-label">分组</span>
+      </div>
+      <div style="flexShrink: 0;">
+        <!-- 全部 -->
+        <div class="sidebar-item active">
+          <span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="flexShrink: 0; opacity: 0.6;"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>
+            全部
+          </span>
+          <span>12</span>
+        </div>
+        <!-- 系统分组 -->
+        <div class="sidebar-section-header">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
+          <span>系统分组</span>
+        </div>
+        <div class="sidebar-item">
+          <span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="opacity: 0.5;"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+            默认分组
+          </span>
+          <span>12</span>
+        </div>
+        <div class="sidebar-item">
+          <span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="opacity: 0.5;"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+            生产环境
+          </span>
+          <span>4</span>
+        </div>
+        <div class="sidebar-item">
+          <span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="opacity: 0.5;"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+            测试环境
+          </span>
+          <span>3</span>
+        </div>
+        <div class="sidebar-item">
+          <span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="opacity: 0.5;"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+            开发环境
+          </span>
+          <span>3</span>
+        </div>
+        <div class="sidebar-item">
+          <span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style="opacity: 0.5;"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+            配置环境
+          </span>
+          <span>2</span>
+        </div>
+      </div>
+      <!-- 自建分组标题栏（始终显示） -->
+      <div class="sidebar-section-header" style="border-top: 1px solid var(--border-color); margin-top: 6px; padding-top: 6px;">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
+        <span>自建分组</span>
+        <button class="sidebar-header-btn" style="margin-left: auto; width: 18px; height: 18px;" data-tooltip="新建分组">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+        </button>
+      </div>
+      <div style="flex: 1; overflow-y: auto; min-height: 0;">
+        <div class="sidebar-item">
+          <span>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" strokeWidth="2" style="flexShrink: 0;"><path d="M12 17v5" /><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /></svg>
+            财务系统
+          </span>
+          <span>3</span>
+        </div>
+        <div class="sidebar-item">
+          <span>HR 人事系统</span>
+          <span>2</span>
+        </div>
+        <div class="sidebar-item">
+          <span>供应链管理</span>
+          <span>2</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+      <!-- 工具栏 -->
+      <div style="flexShrink: 0; border-bottom: 1px solid var(--border-color);">
+        <div style="padding: 8px 12px; display: flex; gap: 6px; align-items: center; position: relative;">
+          <div style="flex: 1; position: relative;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+            <input class="input" placeholder="搜索..." style="width: 100%; font-size: 12px;">
+          </div>
+          <select class="input" style="width: auto; padding: 8px 12px; font-size: 12px;">
+            <option>全部</option>
+            <option>生产</option>
+            <option>测试</option>
+            <option>开发</option>
+          </select>
+          <span style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">12 个连接</span>
+        </div>
+      </div>
+
+      <!-- 凭据列表 -->
+      <div style="flex: 1; overflow-y: auto; padding: 8px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <!-- 凭据卡片 1: PRD_100 生产 -->
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #da1e28; padding: 8px 10px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <input type="checkbox" style="width: 14px; height: 14px; cursor: pointer; flexShrink: 0;" />
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700; font-size: 9px; flexShrink: 0;">PRD</div>
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 4px; flexWrap: wrap;">
+                  <span style="font-weight: 600; font-size: 11px;">ERP 生产系统</span>
+                  <span style="font-size: 8px; background: #da1e28; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 600;">生产</span>
+                </div>
+                <div style="font-size: 9px; color: var(--text-secondary); overflow: hidden; textOverflow: ellipsis; whiteSpace: nowrap;">ZH · ZHANGSAN</div>
+              </div>
+            </div>
+            <div class="cred-actions" style="display: flex; gap: 2px; flexShrink: 0;">
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" data-tooltip="置顶" data-tooltip-pos="top">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="17" x2="12" y2="22" /><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V17z" /></svg>
+              </button>
+              <button class="btn btn-primary btn-sm" style="padding: 3px 7px; display: flex; align-items: center; gap: 3px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
+                <span style="font-size: 9px;">登录</span>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="收藏">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#f1c21b" stroke="#f1c21b" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="编辑">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="复制配置">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="复制连接信息">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="删除">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 凭据卡片 2: PRD_200 生产 -->
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #da1e28; padding: 8px 10px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <input type="checkbox" style="width: 14px; height: 14px; cursor: pointer; flexShrink: 0;" />
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700; font-size: 9px; flexShrink: 0;">PRD</div>
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 4px; flexWrap: wrap;">
+                  <span style="font-weight: 600; font-size: 11px;">S/4HANA 生产</span>
+                  <span style="font-size: 8px; background: #da1e28; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 600;">生产</span>
+                </div>
+                <div style="font-size: 9px; color: var(--text-secondary); overflow: hidden; textOverflow: ellipsis; whiteSpace: nowrap;">EN · LISI</div>
+              </div>
+            </div>
+            <div class="cred-actions" style="display: flex; gap: 2px; flexShrink: 0;">
+              <button class="btn btn-primary btn-sm" style="padding: 3px 7px; display: flex; align-items: center; gap: 3px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
+                <span style="font-size: 9px;">登录</span>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="编辑"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg></button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="删除"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg></button>
+            </div>
+          </div>
+
+          <!-- 凭据卡片 3: TST_100 测试 -->
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #f1c21b; padding: 8px 10px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <input type="checkbox" style="width: 14px; height: 14px; cursor: pointer; flexShrink: 0;" />
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700; font-size: 9px; flexShrink: 0;">TST</div>
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 4px; flexWrap: wrap;">
+                  <span style="font-weight: 600; font-size: 11px;">ERP 测试系统</span>
+                  <span style="font-size: 8px; background: #f1c21b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 600;">测试</span>
+                </div>
+                <div style="font-size: 9px; color: var(--text-secondary); overflow: hidden; textOverflow: ellipsis; whiteSpace: nowrap;">ZH · WANGWU</div>
+              </div>
+            </div>
+            <div class="cred-actions" style="display: flex; gap: 2px; flexShrink: 0;">
+              <button class="btn btn-primary btn-sm" style="padding: 3px 7px; display: flex; align-items: center; gap: 3px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
+                <span style="font-size: 9px;">登录</span>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="编辑"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg></button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="删除"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg></button>
+            </div>
+          </div>
+
+          <!-- 凭据卡片 4: DEV_100 开发 -->
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #198038; padding: 8px 10px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <input type="checkbox" style="width: 14px; height: 14px; cursor: pointer; flexShrink: 0;" />
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700; font-size: 9px; flexShrink: 0;">DEV</div>
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 4px; flexWrap: wrap;">
+                  <span style="font-weight: 600; font-size: 11px;">ERP 开发系统</span>
+                  <span style="font-size: 8px; background: #198038; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 600;">开发</span>
+                </div>
+                <div style="font-size: 9px; color: var(--text-secondary); overflow: hidden; textOverflow: ellipsis; whiteSpace: nowrap;">EN · DEVUSER</div>
+              </div>
+            </div>
+            <div class="cred-actions" style="display: flex; gap: 2px; flexShrink: 0;">
+              <button class="btn btn-primary btn-sm" style="padding: 3px 7px; display: flex; align-items: center; gap: 3px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
+                <span style="font-size: 9px;">登录</span>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="编辑"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg></button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="删除"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg></button>
+            </div>
+          </div>
+
+          <!-- 凭据卡片 5: CFG_100 配置 -->
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #8a3ffc; padding: 8px 10px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <input type="checkbox" style="width: 14px; height: 14px; cursor: pointer; flexShrink: 0;" />
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700; font-size: 9px; flexShrink: 0;">CFG</div>
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 4px; flexWrap: wrap;">
+                  <span style="font-weight: 600; font-size: 11px;">SOLMAN 配置系统</span>
+                  <span style="font-size: 8px; background: #8a3ffc; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 600;">配置</span>
+                </div>
+                <div style="font-size: 9px; color: var(--text-secondary); overflow: hidden; textOverflow: ellipsis; whiteSpace: nowrap;">ZH · SOLMAN_ADMIN</div>
+              </div>
+            </div>
+            <div class="cred-actions" style="display: flex; gap: 2px; flexShrink: 0;">
+              <button class="btn btn-primary btn-sm" style="padding: 3px 7px; display: flex; align-items: center; gap: 3px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
+                <span style="font-size: 9px;">登录</span>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="编辑"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg></button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="删除"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg></button>
+            </div>
+          </div>
+
+          <!-- 凭据卡片 6: 未设置用户名 -->
+          <div class="card" style="display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #6b7280; padding: 8px 10px; opacity: 0.7;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <input type="checkbox" style="width: 14px; height: 14px; cursor: pointer; flexShrink: 0;" />
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700; font-size: 9px; flexShrink: 0;">TST</div>
+              <div style="min-width: 0; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 4px; flexWrap: wrap;">
+                  <span style="font-weight: 600; font-size: 11px;">BW 测试系统</span>
+                  <span style="font-size: 8px; background: #f1c21b; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 600;">测试</span>
+                </div>
+                <div style="font-size: 9px; color: var(--text-secondary); overflow: hidden; textOverflow: ellipsis; whiteSpace: nowrap;">ZH · (未设置)</div>
+              </div>
+            </div>
+            <div class="cred-actions" style="display: flex; gap: 2px; flexShrink: 0;">
+              <button class="btn btn-primary btn-sm" style="padding: 3px 7px; display: flex; align-items: center; gap: 3px;" disabled>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>
+                <span style="font-size: 9px;">登录</span>
+              </button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="编辑"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg></button>
+              <button class="btn btn-ghost btn-sm" style="padding: 4px;" title="删除"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg></button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div class="toast-container">
+    <div class="toast toast-success">已启动 SAP Logon</div>
+  </div>
+</div>
+</body>
+</html>

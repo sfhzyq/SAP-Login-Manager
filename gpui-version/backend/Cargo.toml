@@ -1,0 +1,43 @@
+[package]
+name = "sap-backend"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lib]
+name = "sap_backend"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+aes = "0.9"
+cbc = { version = "0.2", features = ["alloc"] }
+aes-gcm = "0.11"
+rand = "0.10"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+xmltree = "0.12"
+base64 = "0.23"
+sha2 = "0.11"
+hmac = "0.13"
+pbkdf2 = "0.13"
+# Argon2id：v2 密钥派生（OWASP 2023 推荐，抗 GPU 爆破）
+argon2 = "0.6"
+subtle = "2"
+thiserror = "2"
+# 密钥/明文中间值用完清零，防止残留在已释放堆内存
+zeroize = "1"
+log = "0.4"
+arboard = "3"
+
+[target.'cfg(windows)'.dependencies]
+winreg = "0.56"
+windows-sys = { version = "0.61", features = ["Win32_Storage_FileSystem", "Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_Globalization", "Win32_Security_Cryptography", "Win32_System_Diagnostics_ToolHelp"] }
+# SAP GUI Scripting 执行内核（COM / IDispatch 晚期绑定）
+# - Win32_System_Com：IDispatch / CoInitialize / CLSIDFromProgID
+# - Win32_System_Ole：GetActiveObject（取已运行的 SAPGUI）+ IDispatch::Invoke / DISPPARAMS
+# - Win32_System_Variant：VARIANT 类型
+# - Win32_System_Com_StructuredStorage：VARIANT <-> 基本类型 / BSTR 转换（参数构造、状态栏读取）
+windows = { version = "0.61", features = ["Win32_System_Com", "Win32_Foundation", "Win32_System_Ole", "Win32_System_Variant", "Win32_System_Com_StructuredStorage"] }

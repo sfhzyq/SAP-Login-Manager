@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活动栏布局分析</title>
+<style>
+body{margin:0;padding:20px;background:#f5f6f8;font-family:system-ui,-apple-system,sans-serif;color:#2c2c2a}
+h2{font-size:15px;font-weight:500;margin:24px 0 8px}
+p.desc{font-size:13px;color:#5f5e5a;line-height:1.6;margin:0 0 12px}
+svg{max-width:100%;height:auto;display:block;margin:0 auto 28px;border-radius:8px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.tbl th,.tbl td{border:1px solid #dde1ec;padding:8px 12px;text-align:left}
+.tbl th{background:#eef0f6;font-weight:500}
+.tbl .good{color:#185fa5}
+.tbl .bad{color:#a32d2d}
+</style>
+</head>
+<body>
+
+<h2>方案对比：当前 TitleBar 模式 vs 左侧活动栏模式</h2>
+<p class="desc">左图 = 当前布局（TitleBar 横条放按钮，分组占第二行）。右图 = 活动栏模式（按钮竖排左侧 48px，右侧全给内容）。</p>
+
+<svg viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>当前 vs 活动栏布局对比</title>
+  <style>
+    .bg{fill:#eef0f6}.wb{fill:#fafbfc;stroke:#dde1ec;stroke-width:0.5}.card{fill:#fff;stroke:#dde1ec;stroke-width:0.5}
+    .t1{font-size:12px;font-family:ui-sans-serif,system-ui;fill:#2c2c2a;font-weight:500}
+    .t2{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#5f5e5a;font-weight:400}
+    .t3{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#888780;font-weight:400}
+    .tw{font-size:9px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:600}
+    .tb{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:500}
+    .tg{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#185fa5;font-weight:500}
+    .tr{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#a32d2d;font-weight:500}
+  </style>
+
+  <!-- 左：当前布局 -->
+  <text x="160" y="20" text-anchor="middle" class="t1">当前：TitleBar 横条</text>
+  <rect x="20" y="28" width="280" height="440" class="wb" rx="8"/>
+  <!-- TitleBar -->
+  <rect x="20" y="28" width="280" height="34" class="bg" rx="8"/>
+  <text x="30" y="49" class="t1">SAP 登录管理器</text>
+  <rect x="140" y="38" width="24" height="16" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="3"/>
+  <rect x="168" y="38" width="24" height="16" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="3"/>
+  <rect x="196" y="38" width="24" height="16" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="3"/>
+  <rect x="224" y="38" width="24" height="16" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="3"/>
+  <rect x="252" y="38" width="24" height="16" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="3"/>
+  <text x="160" y="72" text-anchor="middle" class="tr">↑ 标题+5按钮挤 34px</text>
+  <!-- 搜索行 -->
+  <rect x="30" y="80" width="180" height="22" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="38" y="94" class="t3">搜索…</text>
+  <rect x="214" y="80" width="76" height="22" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="252" y="94" text-anchor="middle" class="t3">排序</text>
+  <!-- 分组行 -->
+  <rect x="30" y="108" width="260" height="22" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="38" y="122" class="t3">全部 · 12</text>
+  <text x="160" y="142" text-anchor="middle" class="tr">↑ 分组独占一行</text>
+  <!-- 卡片区 -->
+  <rect x="30" y="150" width="260" height="44" class="card" rx="6"/>
+  <rect x="34" y="154" width="3" height="36" fill="#da1e28" rx="1"/>
+  <rect x="44" y="158" width="28" height="28" fill="#da1e28" rx="5"/>
+  <text x="58" y="176" text-anchor="middle" class="tw">PRD</text>
+  <text x="80" y="168" class="t1">SAP-PRD-100</text>
+  <text x="80" y="184" class="t2">USER01 · ZH</text>
+  <rect x="226" y="162" width="50" height="20" fill="#007aff" rx="4"/>
+  <text x="251" y="175" text-anchor="middle" class="tb">登录</text>
+  <rect x="30" y="200" width="260" height="44" class="card" rx="6"/>
+  <rect x="34" y="204" width="3" height="36" fill="#198038" rx="1"/>
+  <rect x="44" y="208" width="28" height="28" fill="#198038" rx="5"/>
+  <text x="58" y="226" text-anchor="middle" class="tw">DEV</text>
+  <text x="80" y="218" class="t1">SAP-DEV-200</text>
+  <text x="80" y="234" class="t2">DEVUSER · ZH</text>
+  <rect x="226" y="212" width="50" height="20" fill="#007aff" rx="4"/>
+  <text x="251" y="225" text-anchor="middle" class="tb">登录</text>
+  <text x="160" y="270" text-anchor="middle" class="t3">列表区宽 260px</text>
+  <text x="160" y="300" text-anchor="middle" class="tr">内容区被标题+分组吃掉 130px 高度</text>
+
+  <!-- 分割线 -->
+  <line x1="320" y1="28" x2="320" y2="468" stroke="#dde1ec" stroke-width="0.5"/>
+
+  <!-- 右：活动栏布局 -->
+  <text x="490" y="20" text-anchor="middle" class="t1">活动栏模式</text>
+  <rect x="340" y="28" width="300" height="440" class="wb" rx="8"/>
+  <!-- 活动栏 48px -->
+  <rect x="340" y="28" width="48" height="440" class="bg"/>
+  <!-- logo -->
+  <rect x="350" y="36" width="28" height="28" fill="#007aff" rx="6"/>
+  <text x="364" y="55" text-anchor="middle" class="tw">S</text>
+  <line x1="340" y1="72" x2="388" y2="72" stroke="#dde1ec" stroke-width="0.5"/>
+  <!-- 新增 -->
+  <rect x="350" y="80" width="28" height="28" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="364" y="99" text-anchor="middle" class="t3">＋</text>
+  <!-- 分组 -->
+  <rect x="350" y="114" width="28" height="28" class="bg" stroke="#85b7eb" stroke-width="1" rx="6"/>
+  <rect x="350" y="114" width="3" height="28" fill="#185fa5" rx="1"/>
+  <text x="364" y="133" text-anchor="middle" class="t3">☰</text>
+  <!-- 主题 -->
+  <rect x="350" y="148" width="28" height="28" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="364" y="167" text-anchor="middle" class="t3">◑</text>
+  <!-- 设置 -->
+  <rect x="350" y="182" width="28" height="28" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="364" y="201" text-anchor="middle" class="t3">⚙</text>
+  <!-- 更多 -->
+  <rect x="350" y="216" width="28" height="28" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="364" y="235" text-anchor="middle" class="t3">⋯</text>
+
+  <line x1="340" y1="428" x2="388" y2="428" stroke="#dde1ec" stroke-width="0.5"/>
+  <!-- 锁定 -->
+  <rect x="350" y="436" width="28" height="24" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="364" y="452" text-anchor="middle" class="t3">🔒</text>
+
+  <!-- 右侧内容区 -->
+  <rect x="388" y="28" width="252" height="440" class="bg"/>
+  <!-- 搜索 -->
+  <rect x="398" y="38" width="170" height="24" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="406" y="55" class="t3">搜索…</text>
+  <text x="576" y="55" class="t3">12</text>
+  <rect x="574" y="38" width="56" height="24" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="5"/>
+  <text x="602" y="55" text-anchor="middle" class="t3">排序</text>
+  <!-- 卡片 -->
+  <rect x="398" y="70" width="232" height="44" class="card" rx="6"/>
+  <rect x="402" y="74" width="3" height="36" fill="#da1e28" rx="1"/>
+  <rect x="412" y="78" width="28" height="28" fill="#da1e28" rx="5"/>
+  <text x="426" y="96" text-anchor="middle" class="tw">PRD</text>
+  <text x="448" y="88" class="t1">SAP-PRD-100</text>
+  <text x="448" y="104" class="t2">USER01 · ZH</text>
+  <rect x="570" y="82" width="50" height="20" fill="#007aff" rx="4"/>
+  <text x="595" y="95" text-anchor="middle" class="tb">登录</text>
+  <rect x="398" y="120" width="232" height="44" class="card" rx="6"/>
+  <rect x="402" y="124" width="3" height="36" fill="#198038" rx="1"/>
+  <rect x="412" y="128" width="28" height="28" fill="#198038" rx="5"/>
+  <text x="426" y="146" text-anchor="middle" class="tw">DEV</text>
+  <text x="448" y="138" class="t1">SAP-DEV-200</text>
+  <text x="448" y="154" class="t2">DEVUSER · ZH</text>
+  <rect x="570" y="132" width="50" height="20" fill="#007aff" rx="4"/>
+  <text x="595" y="145" text-anchor="middle" class="tb">登录</text>
+  <rect x="398" y="170" width="232" height="44" class="card" rx="6"/>
+  <rect x="402" y="174" width="3" height="36" fill="#f1c21b" rx="1"/>
+  <rect x="412" y="178" width="28" height="28" fill="#f1c21b" rx="5"/>
+  <text x="426" y="196" text-anchor="middle" class="tw">TST</text>
+  <text x="448" y="188" class="t1">SAP-TST-300</text>
+  <text x="448" y="204" class="t2">TSTUSER · ZH</text>
+  <rect x="570" y="182" width="50" height="20" fill="#007aff" rx="4"/>
+  <text x="595" y="195" text-anchor="middle" class="tb">登录</text>
+  <rect x="398" y="220" width="232" height="44" class="card" rx="6"/>
+  <rect x="402" y="224" width="3" height="36" fill="#8a3ffc" rx="1"/>
+  <rect x="412" y="228" width="28" height="28" fill="#8a3ffc" rx="5"/>
+  <text x="426" y="246" text-anchor="middle" class="tw">CNF</text>
+  <text x="448" y="238" class="t1">SAP-CFG-400</text>
+  <text x="448" y="254" class="t2">CFGUSER · ZH</text>
+  <rect x="570" y="232" width="50" height="20" fill="#007aff" rx="4"/>
+  <text x="595" y="245" text-anchor="middle" class="tb">登录</text>
+  <rect x="398" y="270" width="232" height="44" class="card" rx="6"/>
+  <rect x="402" y="274" width="3" height="36" fill="#6b7280" rx="1"/>
+  <rect x="412" y="278" width="28" height="28" fill="#6b7280" rx="5"/>
+  <text x="426" y="296" text-anchor="middle" class="tw">SYS</text>
+  <text x="448" y="288" class="t1">SAP-SYS-500</text>
+  <text x="448" y="304" class="t2">SYSUSER · ZH</text>
+  <rect x="570" y="282" width="50" height="20" fill="#007aff" rx="4"/>
+  <text x="595" y="295" text-anchor="middle" class="tb">登录</text>
+  <!-- 浮动批量栏 -->
+  <rect x="430" y="400" width="180" height="30" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="15"/>
+  <text x="442" y="420" class="t1">已选 2 项</text>
+  <rect x="510" y="406" width="1" height="18" fill="#dde1ec"/>
+  <text x="518" y="420" class="t2">登录 收藏 删除</text>
+
+  <text x="514" y="300" text-anchor="middle" class="tg">↑ 无标题行 · 无分组行</text>
+  <text x="514" y="318" text-anchor="middle" class="tg">列表区直接 70px 开始</text>
+  <text x="514" y="350" text-anchor="middle" class="t3">活动栏 48px · 列表 252px</text>
+  <text x="514" y="368" text-anchor="middle" class="tg">多出 5 张卡片可见空间</text>
+</svg>
+
+<h2>活动栏按钮布局</h2>
+<p class="desc">左侧 48px 竖条，从上到下：应用图标 → 功能按钮 → 底部锁定。分组按钮点击后弹出右侧浮层（与当前下拉一致）。</p>
+
+<svg viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>活动栏按钮布局详解</title>
+  <style>
+    .bg{fill:#eef0f6}.wb{fill:#fafbfc;stroke:#dde1ec;stroke-width:0.5}.sel{fill:#e6f1fb;stroke:#85b7eb;stroke-width:1}
+    .t1{font-size:12px;font-family:ui-sans-serif,system-ui;fill:#2c2c2a;font-weight:500}
+    .t2{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#5f5e5a;font-weight:400}
+    .t3{font-size:10px;font-family:ui-sans-serif,system-ui;fill:#888780;font-weight:400}
+    .tw{font-size:9px;font-family:ui-sans-serif,system-ui;fill:#fff;font-weight:600}
+    .tg{font-size:11px;font-family:ui-sans-serif,system-ui;fill:#185fa5;font-weight:500}
+  </style>
+
+  <rect x="40" y="10" width="120" height="200" class="bg" rx="8"/>
+  <text x="100" y="200" text-anchor="middle" class="t3">48px</text>
+
+  <!-- logo -->
+  <rect x="60" y="22" width="32" height="32" fill="#007aff" rx="8"/>
+  <text x="76" y="43" text-anchor="middle" class="tw">S</text>
+  <line x1="48" y1="62" x2="152" y2="62" stroke="#dde1ec" stroke-width="0.5"/>
+
+  <!-- 新增(选中态示意) -->
+  <rect x="60" y="70" width="32" height="32" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="8"/>
+  <text x="76" y="91" text-anchor="middle" class="t3">＋</text>
+  <text x="160" y="89" class="t2">新增凭据</text>
+
+  <!-- 分组 -->
+  <rect x="58" y="108" width="36" height="32" class="sel" rx="8"/>
+  <rect x="58" y="108" width="3" height="32" fill="#185fa5" rx="1"/>
+  <text x="76" y="129" text-anchor="middle" class="t3">☰</text>
+  <text x="160" y="127" class="tg">分组筛选（点击弹出下拉）</text>
+
+  <!-- 主题 -->
+  <rect x="60" y="146" width="32" height="32" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="8"/>
+  <text x="76" y="167" text-anchor="middle" class="t3">◑</text>
+  <text x="160" y="165" class="t2">主题切换</text>
+
+  <!-- 设置 -->
+  <rect x="60" y="0" width="0" height="0" fill="none"/>
+
+  <line x1="48" y1="178" x2="152" y2="178" stroke="#dde1ec" stroke-width="0.5"/>
+
+  <!-- 锁定 -->
+  <rect x="60" y="186" width="32" height="20" fill="#fff" stroke="#dde1ec" stroke-width="0.5" rx="6"/>
+  <text x="76" y="200" text-anchor="middle" class="t3">🔒</text>
+  <text x="160" y="200" class="t2">锁定</text>
+
+  <!-- 右侧说明 -->
+  <rect x="300" y="20" width="360" height="180" fill="#fafafa" stroke="#dde1ec" stroke-width="0.5" rx="8"/>
+  <text x="316" y="42" class="t1">分组按钮弹出行为</text>
+  <text x="316" y="62" class="t2">点击 ☰ → 在按钮右侧弹出浮层</text>
+  <text x="316" y="80" class="t2">浮层内容与当前下拉一致：</text>
+  <text x="316" y="96" class="t3">• 顶部固定项（全部 / 收藏）</text>
+  <text x="316" y="112" class="t3">• 系统/默认分组（带计数+选中标记）</text>
+  <text x="316" y="128" class="t3">• 自定义分组（带计数+选中标记）</text>
+  <text x="316" y="144" class="t3">• 末尾「管理分组」入口</text>
+  <text x="316" y="164" class="tg">分组多时可加搜索框（可选）</text>
+  <text x="316" y="186" class="t2">→ 界面不增大，分组再多也能处理</text>
+</svg>
+
+<h2>对比总结</h2>
+<table class="tbl">
+<tr><th>维度</th><th>当前 TitleBar 模式</th><th>活动栏模式</th></tr>
+<tr><td>垂直空间</td><td class="bad">标题34 + 搜索40 + 分组36 = 110px 才到列表</td><td class="good">搜索24 = 24px 就到列表（省 86px）</td></tr>
+<tr><td>水平空间</td><td class="good">列表占满全宽</td><td>活动栏占 48px，列表少 48px</td></tr>
+<tr><td>分组展示</td><td>独占一行下拉按钮</td><td class="good">活动栏一个图标，弹出浮层</td></tr>
+<tr><td>按钮发现性</td><td class="good">横排一眼看到</td><td>竖排需扫视，但 5 个不多</td></tr>
+<tr><td>可扩展性</td><td class="bad">按钮多了横条会挤</td><td class="good">竖排加多少都不挤</td></tr>
+<tr><td>适合小工具</td><td>OK 但空间利用率低</td><td class="good">最佳：紧凑 + 内容最大化</td></tr>
+</table>
+
+</body>
+</html>

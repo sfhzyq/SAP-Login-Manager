@@ -1,0 +1,83 @@
+name: Build GPUI Windows
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: |
+            i686-pc-windows-msvc
+            aarch64-pc-windows-msvc
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: gpui-version
+
+      # 测试门禁（健康度整改 Step C）：单测（含 UI 冒烟）不通过则中止出包
+      - name: Run tests
+        working-directory: gpui-version
+        run: cargo test --workspace --release
+
+      - name: Build x86
+        working-directory: gpui-version
+        run: cargo build --release --target i686-pc-windows-msvc -p sap-login-manager-gpui
+
+      - name: Build x64
+        working-directory: gpui-version
+        run: cargo build --release -p sap-login-manager-gpui
+
+      - name: Build ARM64 (native for Windows on ARM / Parallels on Apple Silicon)
+        working-directory: gpui-version
+        run: cargo build --release --target aarch64-pc-windows-msvc -p sap-login-manager-gpui
+
+      - name: Collect artifacts
+        shell: pwsh
+        run: |
+          Copy-Item "gpui-version/target/i686-pc-windows-msvc/release/sap-login-manager-gpui.exe" "sap-login-manager-gpui-x86.exe"
+          Copy-Item "gpui-version/target/release/sap-login-manager-gpui.exe" "sap-login-manager-gpui-x64.exe"
+          Copy-Item "gpui-version/target/aarch64-pc-windows-msvc/release/sap-login-manager-gpui.exe" "sap-login-manager-gpui-arm64.exe"
+          Get-ChildItem *.exe | Select-Object Name, Length
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gpui-windows-binaries
+          path: |
+            sap-login-manager-gpui-x86.exe
+            sap-login-manager-gpui-x64.exe
+            sap-login-manager-gpui-arm64.exe
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            sap-login-manager-gpui-x86.exe
+            sap-login-manager-gpui-x64.exe
+            sap-login-manager-gpui-arm64.exe
+          body: |
+            SAP Login Manager (GPUI 版) Windows 构建产物
+
+            - `sap-login-manager-gpui-x86.exe`:i686 32 位,适用于 32 位 Windows / 老旧终端
+            - `sap-login-manager-gpui-x64.exe`:x86_64,适用于所有 Windows(x64 原生 / Windows on ARM 经模拟层运行)
+            - `sap-login-manager-gpui-arm64.exe`:ARM64 原生,适用于 Windows 11 on ARM(Parallels on Apple Silicon 等)
+              实测:ARM64 原生内存占用约 28MB(对比 x64 模拟层运行约 50MB),跨架构 COM 驱动 x64 SAP GUI 一键登录验证通过
+
+            免安装单文件、无运行时依赖;便携模式,数据存于 exe 同目录 `data\`
+          draft: true
+          prerelease: ${{ contains(github.ref, 'rc') || contains(github.ref, 'beta') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
